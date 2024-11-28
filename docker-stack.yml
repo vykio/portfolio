@@ -8,10 +8,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.portfolio-http.rule=Host(`vykio.fr`)
+        - traefik.http.routers.portfolio-http.rule=Host(`alexandre-vasseur.com`)
         - traefik.http.routers.portfolio-http.entrypoints=http
         - traefik.http.routers.portfolio-http.middlewares=https-redirect
-        - traefik.http.routers.portfolio-https.rule=Host(`vykio.fr`)
+        - traefik.http.routers.portfolio-https.rule=Host(`alexandre-vasseur.com`)
         - traefik.http.routers.portfolio-https.entrypoints=https
         - traefik.http.routers.portfolio-https.tls=true
         - traefik.http.routers.portfolio-https.tls.certresolver=le
