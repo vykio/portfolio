@@ -1,6 +1,6 @@
 services:
   portfolio:
-    image: ghcr.io/vykio/vykio.fr:latest
+    image: ghcr.io/vykio/portfolio:latest
     networks:
       - traefik-public
     deploy:
