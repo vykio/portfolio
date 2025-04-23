@@ -1,0 +1,8 @@
+image:
+  repository: ghcr.io/vykio/portfolio
+  tag: latest
+
+domain: alexandre-vasseur.com
+
+service:
+  port: 80
