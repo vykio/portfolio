@@ -1,0 +1,51 @@
+# Bouton « Deploy » d'une application : à copier tel quel en .github/workflows/deploy.yml
+# du dépôt de l'appli. Il demande au dépôt vykio/infrastructure de déployer une image déjà
+# publiée par la CI de l'appli ; le déploiement s'exécute ensuite dans l'infra.
+# Prérequis : secret INFRA_DEPLOY_TOKEN (jeton à portée fine, dépôt vykio/infrastructure,
+# permission Actions : read and write) ; variable DEPLOY_APP si le nom de l'appli dans
+# tofu/prod/images.json diffère du nom du dépôt. Voir le README de prod-infrastructure.
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Sha court à déployer, 7 caractères (vide : dernier build vert de master)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Choisir le tag
+        id: tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          tag="$INPUT_TAG"
+          if [ -z "$tag" ]; then
+            tag=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci.yml --branch master --event push --status success -L 1 \
+                  --json headSha -q '.[0].headSha' | cut -c1-7)
+          fi
+          [[ $tag =~ ^[0-9a-f]{7,40}$ ]] || { echo "tag introuvable ou invalide : « $tag »" >&2; exit 1; }
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Demander le déploiement
+        env:
+          GH_TOKEN: ${{ secrets.INFRA_DEPLOY_TOKEN }}
+          APP: ${{ vars.DEPLOY_APP || github.event.repository.name }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          # --ref explicite : sans lui, gh lit la branche par défaut, ce que le jeton (Actions
+          # seulement) ne permet pas.
+          gh workflow run deploy.yml -R vykio/infrastructure --ref main -f app="$APP" -f tag="$TAG"
+          {
+            echo "Déploiement de **$APP** en \`$TAG\` demandé."
+            echo "Suivi : https://github.com/vykio/infrastructure/actions/workflows/deploy.yml"
+          } >> "$GITHUB_STEP_SUMMARY"
