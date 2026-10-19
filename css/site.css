@@ -45,7 +45,6 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.03em; text-wrap: balance; }
 .intro img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; }
 .intro p { font-size: clamp(17px, 1.6vw, 21px); color: var(--ink-2); }
 .intro p a { color: var(--ink); text-decoration: none; }
-.intro .co { display: inline-block; height: 0.72em; width: auto; vertical-align: -0.02em; margin: 0 0.08em; }
 @media (max-width: 720px) { .intro { gap: 14px; } .intro img { width: 48px; height: 48px; } }
 
 /* ——— Lien d'action ——— */
@@ -86,7 +85,6 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.03em; text-wrap: balance; }
 .cv .yr { color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .cv h3 { font-size: 20px; letter-spacing: -0.015em; line-height: 1.25; }
 .cv .org { color: var(--ink-2); }
-.cv .org .co { display: inline-block; height: 0.78em; width: auto; vertical-align: -0.04em; }
 .cv p { color: var(--ink-2); }
 
 /* ——— Outils, archive ——— */
