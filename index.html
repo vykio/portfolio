@@ -22,7 +22,9 @@
 <meta name="twitter:title" content="Alexandre Vasseur, ingénieur web à Lille">
 <meta name="twitter:description" content="Ingénieur web senior chez sweeek. En dehors, je développe Alvatech et akwito.">
 <meta name="twitter:image" content="https://alexandre-vasseur.com/img/og.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%223%22 fill=%22%23121417%22/><path d=%22M6 16L9.5 8L13 16M7.2 13.2H11.8%22 stroke=%22%23FFFFFF%22 stroke-width=%221.6%22 stroke-linecap=%22square%22 fill=%22none%22/><path d=%22M13 8L15.5 14L18 8%22 stroke=%22%23FFFFFF%22 stroke-width=%221.6%22 stroke-linecap=%22square%22 fill=%22none%22/><circle cx=%2218.6%22 cy=%2216%22 r=%221.5%22 fill=%22%23D97706%22/></svg>">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="fonts/instrument-sans-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/site.css">
 <script type="application/ld+json">
@@ -73,12 +75,13 @@
 
 <header class="hero" id="hero">
   <canvas id="ribbon" aria-hidden="true"></canvas>
+  <img class="hero-still" src="img/ribbon-m.webp" alt="" width="824" height="1548" fetchpriority="low" decoding="async">
   <div class="hero-fallback" aria-hidden="true"></div>
   <div class="wrap claim" id="top">
     <h1>Je construis des outils qui règlent de vrais problèmes.</h1>
     <div class="intro">
       <img src="img/avatar.webp" alt="" width="480" height="360">
-      <p>Ingénieur web senior chez <a href="https://sweeek.fr">sweeek</a> à Lille, j'ai toujours quelques projets en dehors. Deux sont en production : <a href="https://alvatech.fr">Alvatech</a> et <a href="https://akwito.eu">akwito</a>.</p>
+      <p>Ingénieur web senior chez <a href="https://sweeek.fr">sweeek</a> à Lille, j'ai toujours quelques projets en dehors. Deux sont en production : <a href="https://alvatech.fr">Alvatech, conseil et développement pour les PME à Lille</a>, et <a href="https://akwito.eu">akwito</a>.</p>
     </div>
     <div class="links">
       <a class="link" href="#projets">Voir mes projets</a>
@@ -100,7 +103,7 @@
           <span class="what">Conseil et développement pour les PME</span>
           <h3><a href="https://alvatech.fr">Alvatech</a></h3>
           <p>Mon activité à côté de mon poste : sites web, applications internes, automatisations, conseil informatique et IA pour les PME et TPE. Une seule personne, de l'appel à la mise en production, et des outils que vous pouvez reprendre sans moi.</p>
-          <a class="link" href="https://alvatech.fr">Découvrir alvatech.fr</a>
+          <a class="link" href="https://alvatech.fr">Sites web, applications et conseil informatique pour PME : alvatech.fr</a>
         </article>
 
         <article class="project">
@@ -109,8 +112,8 @@
           <p>En B2B intracommunautaire, une facture sans TVA ne tient que si le numéro du client était valide le jour de la facture. VIES répond, puis oublie. Le contrôle fiscal arrive des années plus tard.</p>
           <p>akwito interroge VIES, recoupe l'identité avec GLEIF et l'Annuaire des Entreprises, et scelle chaque vérification dans une attestation PDF horodatée que n'importe qui peut contrôler sans compte. Lots CSV, surveillance planifiée, espace pour les cabinets comptables, API et serveur MCP. Écrit en Go, hébergé sur Kubernetes.</p>
           <div class="shots">
-            <figure><img src="img/akwito-app.webp" alt="Tableau de bord akwito : vérifications récentes et éléments à traiter" width="2400" height="1500" loading="lazy" decoding="async"><figcaption>Le tableau de bord : les vérifications et ce qui demande une action.</figcaption></figure>
-            <figure><img src="img/akwito-preuve.webp" alt="Page publique de preuve d'une attestation akwito" width="2400" height="1500" loading="lazy" decoding="async"><figcaption>La preuve publique : n'importe qui peut contrôler une attestation.</figcaption></figure>
+            <figure><img src="img/akwito-app-740.webp" srcset="img/akwito-app-740.webp 740w, img/akwito-app-1480.webp 1480w" sizes="(min-width: 860px) 36vw, calc(100vw - 40px)" alt="Tableau de bord akwito : vérifications récentes et éléments à traiter" width="1480" height="925" loading="lazy" decoding="async"><figcaption>Le tableau de bord : les vérifications et ce qui demande une action.</figcaption></figure>
+            <figure><img src="img/akwito-preuve-740.webp" srcset="img/akwito-preuve-740.webp 740w, img/akwito-preuve-1480.webp 1480w" sizes="(min-width: 860px) 36vw, calc(100vw - 40px)" alt="Page publique de preuve d'une attestation akwito" width="1480" height="925" loading="lazy" decoding="async"><figcaption>La preuve publique : n'importe qui peut contrôler une attestation.</figcaption></figure>
           </div>
           <a class="link" href="https://akwito.eu">Découvrir akwito.eu</a>
         </article>
@@ -208,8 +211,19 @@
   </div>
 </footer>
 
-<script src="js/vendor/three.min.js" defer></script>
-<script src="js/ribbon.js" defer></script>
+<script>
+/* Le ruban (three.js, 600 Ko) arrive après tout le reste : la page est lisible et cliquable avant lui. */
+window.addEventListener('load', function () {
+  // Sur téléphone, le ruban est une image fixe (.hero-still) : pas de WebGL, pas de script.
+  if (!window.matchMedia('(min-width: 700px)').matches) return;
+  function go() {
+    var s = document.createElement('script'); s.src = 'js/vendor/three.min.js';
+    s.onload = function () { var r = document.createElement('script'); r.src = 'js/ribbon.js'; document.body.appendChild(r); };
+    document.body.appendChild(s);
+  }
+  if ('requestIdleCallback' in window) { requestIdleCallback(go, { timeout: 2000 }); } else { setTimeout(go, 200); }
+});
+</script>
 <script defer src="/s/s.js" data-website-id="b681cfbf-41f2-5dde-9bf3-c010bb9ef092"></script>
 </body>
 </html>
