@@ -114,8 +114,9 @@
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     var narrow = w < 700;
-    camera.position.z = narrow ? 20 : 16;
-    scene.position.set(narrow ? 0.5 : 0, narrow ? -0.4 : -0.6, 0);
+    // Écran étroit : caméra reculée, le ruban ondule sous les liens du hero au lieu d'en montrer une tranche.
+    camera.position.z = narrow ? 34 : 16;
+    scene.position.set(narrow ? 0.5 : 0, narrow ? -4.2 : -0.6, 0);
     scene.rotation.z = narrow ? -0.25 : 0;
     if (reduce) { build(0); renderer.render(scene, camera); }
   }
